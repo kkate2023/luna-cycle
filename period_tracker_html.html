@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Luna Cycle 🌸</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;600&display=swap" rel="stylesheet"/>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{min-height:100vh;background:linear-gradient(135deg,#fde8f0 0%,#ede0f7 100%);font-family:'Lato',sans-serif;color:#5a3e6b}
+  h1,h2,h3,.serif{font-family:'Playfair Display',serif}
+
+  /* HEADER */
+  header{background:rgba(255,255,255,0.6);backdrop-filter:blur(12px);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 20px #e8c6f040;position:sticky;top:0;z-index:10}
+  .logo{font-family:'Playfair Display',serif;font-size:24px;color:#b56da4;font-weight:700}
+  nav{display:flex;gap:8px;flex-wrap:wrap}
+  nav button{background:rgba(255,255,255,0.7);color:#b56da4;border:1.5px solid #e8c6f0;border-radius:20px;padding:8px 18px;cursor:pointer;font-weight:600;font-size:13px;font-family:'Lato',sans-serif;transition:all 0.2s}
+  nav button.active,nav button:hover{background:linear-gradient(90deg,#e38bbf,#b56da4);color:#fff;border-color:transparent}
+
+  /* LAYOUT */
+  .container{max-width:620px;margin:32px auto;padding:0 16px}
+  .card{background:rgba(255,255,255,0.75);border-radius:24px;padding:28px;box-shadow:0 4px 32px #d4a8e820;margin-bottom:20px}
+  .section-title{font-family:'Playfair Display',serif;font-size:20px;color:#b56da4;margin-bottom:18px}
+
+  /* FORM */
+  label{display:block;font-size:13px;font-weight:600;color:#b56da4;margin-bottom:6px;margin-top:12px}
+  input[type=date],input[type=number]{width:100%;padding:11px 14px;border-radius:14px;border:1.5px solid #e8c6f0;background:#fff9fd;font-size:15px;color:#5a3e6b;outline:none;font-family:'Lato',sans-serif}
+  input:focus{border-color:#b56da4}
+  .btn{background:linear-gradient(90deg,#e38bbf,#b56da4);color:#fff;border:none;border-radius:20px;padding:13px 32px;font-weight:700;font-size:15px;cursor:pointer;width:100%;margin-top:16px;font-family:'Playfair Display',serif;letter-spacing:0.3px;transition:opacity 0.2s}
+  .btn:hover{opacity:0.88}
+  .success{background:#f0faf5;color:#3a9e6a;border-radius:12px;padding:10px 16px;text-align:center;font-weight:600;margin-top:10px;font-size:14px}
+
+  /* INSIGHTS */
+  .insight-row{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid #f3ddf7}
+  .insight-row:last-child{border-bottom:none}
+  .insight-icon{font-size:22px;width:36px;text-align:center}
+  .insight-label{font-size:12px;color:#a07ab5;font-weight:500;margin-bottom:2px}
+  .insight-val{font-size:15px;font-weight:700;color:#7a3fa0;font-family:'Playfair Display',serif}
+
+  /* TIPS */
+  .tip{background:linear-gradient(90deg,#fde8f0,#ede0f7);border-radius:16px;padding:14px 18px;font-size:14px;color:#7a3fa0;margin-bottom:12px;line-height:1.7}
+  .tip b{font-family:'Playfair Display',serif;font-size:15px}
+
+  /* REMINDER BANNER */
+  .reminder-banner{background:linear-gradient(90deg,#fde8f0,#fcd6eb);border:1.5px solid #f0a8cc;border-radius:18px;padding:16px 20px;margin-bottom:20px}
+  .reminder-banner h3{font-family:'Playfair Display',serif;color:#c0507a;margin-bottom:8px;font-size:17px}
+  .reminder-banner ul{list-style:none;padding:0}
+  .reminder-banner ul li{font-size:13px;color:#8a3a5a;padding:4px 0;line-height:1.6}
+  .reminder-banner ul li::before{content:"⚠️ ";font-size:12px}
+
+  /* HISTORY */
+  .hist-item{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid #f3ddf7}
+  .hist-item:last-child{border-bottom:none}
+  .hist-name{font-weight:700;color:#7a3fa0;font-family:'Playfair Display',serif;font-size:15px}
+  .hist-sub{font-size:12px;color:#a07ab5;margin-top:2px}
+  .del-btn{background:none;border:none;cursor:pointer;color:#e38bbf;font-size:18px;padding:4px}
+  .empty{text-align:center;color:#c9a8d8;padding:32px 0;font-size:15px;font-family:'Playfair Display',serif}
+
+  /* CALENDAR */
+  .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+  .cal-nav{background:none;border:1.5px solid #e8c6f0;border-radius:12px;padding:6px 14px;cursor:pointer;color:#b56da4;font-size:16px;font-weight:700}
+  .cal-nav:hover{background:#fde8f0}
+  .cal-month{font-family:'Playfair Display',serif;font-size:19px;color:#b56da4}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+  .cal-day-name{text-align:center;font-size:11px;font-weight:700;color:#c9a8d8;padding:6px 0;text-transform:uppercase}
+  .cal-day{text-align:center;border-radius:50%;width:36px;height:36px;line-height:36px;font-size:13px;margin:auto;cursor:default;font-weight:500;position:relative}
+  .cal-day.today{border:2px solid #b56da4;color:#b56da4;font-weight:700}
+  .cal-day.period{background:linear-gradient(135deg,#f4a0c0,#e070a0);color:#fff;font-weight:700}
+  .cal-day.fertile{background:linear-gradient(135deg,#d4a8f0,#b880e0);color:#fff;font-weight:700}
+  .cal-day.ovulation{background:linear-gradient(135deg,#a060d0,#7a30b0);color:#fff;font-weight:700;box-shadow:0 0 8px #c090f060}
+  .cal-day.predicted{background:linear-gradient(135deg,#ffd0e8,#ffb0d0);color:#8a3060;font-weight:600}
+  .cal-day.premenstrual{background:linear-gradient(135deg,#ffe4cc,#ffcca0);color:#8a5020;font-weight:600}
+  .cal-day.empty-day{opacity:0}
+  .legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#7a3fa0}
+  .legend-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+
+  /* VIEWS */
+  .view{display:none}
+  .view.active{display:block}
+
+  /* PAGE */
+  .view{display:none}.view.active{display:block}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🌸 Luna Cycle</div>
+  <nav>
+    <button class="active" onclick="showView('home',this)">🏠 Home</button>
+    <button onclick="showView('calendar',this)">📅 Calendar</button>
+    <button onclick="showView('log',this)">✏️ Log</button>
+    <button onclick="showView('history',this)">📋 History</button>
+  </nav>
+</header>
+
+<div class="container">
+
+  <!-- HOME -->
+  <div id="view-home" class="view active">
+    <div id="reminder-area"></div>
+    <div class="card">
+      <div class="section-title">Your Cycle Overview</div>
+      <div id="home-content"><div class="empty">No cycles logged yet.<br/>Tap <b>Log</b> to add your first period 🌸</div></div>
+    </div>
+    <div id="tips-card" style="display:none" class="card">
+      <div class="section-title">🌿 Pregnancy Prep Tips</div>
+      <div class="tip"><b>Fertile Window</b><br>Your most fertile days are roughly 5 days before ovulation through ovulation day — the best time to try to conceive.</div>
+      <div class="tip"><b>Start Folic Acid Early</b><br>Begin taking folic acid at least 1 month before trying to conceive to support a healthy pregnancy.</div>
+      <div class="tip"><b>Log More Cycles</b><br>The more cycles you track, the more accurate your predictions. Aim for at least 3 cycles for personalised insights.</div>
+      <div id="fertile-tip" class="tip"></div>
+    </div>
+  </div>
+
+  <!-- CALENDAR -->
+  <div id="view-calendar" class="view">
+    <div class="card">
+      <div class="cal-header">
+        <button class="cal-nav" onclick="changeMonth(-1)">‹</button>
+        <div class="cal-month" id="cal-title"></div>
+        <button class="cal-nav" onclick="changeMonth(1)">›</button>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#f4a0c0"></div> Period</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#ffd0e8"></div> Predicted Period</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#d4a8f0"></div> Fertile Window</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#a060d0"></div> Ovulation</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#ffcca0"></div> PMS Week</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOG -->
+  <div id="view-log" class="view">
+    <div class="card">
+      <div class="section-title">✏️ Log a Period</div>
+      <label>Start date</label>
+      <input type="date" id="input-start" max=""/>
+      <label>How many days did it last?</label>
+      <input type="number" id="input-duration" min="1" max="10" placeholder="e.g. 5"/>
+      <button class="btn" onclick="handleLog()">Save Period 🌸</button>
+      <div id="save-msg" style="display:none" class="success">✓ Period logged successfully!</div>
+    </div>
+  </div>
+
+  <!-- HISTORY -->
+  <div id="view-history" class="view">
+    <div class="card">
+      <div class="section-title">📋 Cycle History</div>
+      <div id="history-list"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── Data ──────────────────────────────────────────────────────────
+const KEY = "luna_cycles";
+let cycles = [];
+try { cycles = JSON.parse(localStorage.getItem(KEY)) || []; } catch{}
+
+function save() { try{ localStorage.setItem(KEY, JSON.stringify(cycles)); }catch{} }
+
+// ── Utils ─────────────────────────────────────────────────────────
+function addDays(d, n) { const r=new Date(d); r.setDate(r.getDate()+n); return r; }
+function fmt(d) { return new Date(d).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}); }
+function daysBetween(a,b){ return Math.round((new Date(b)-new Date(a))/(86400000)); }
+function toISO(d){ return d.toISOString().split("T")[0]; }
+
+function getStats() {
+  if (!cycles.length) return null;
+  const sorted = [...cycles].sort((a,b)=>new Date(a.startDate)-new Date(b.startDate));
+  const avgLen = sorted.length>=2
+    ? Math.round(sorted.slice(1).reduce((acc,c,i)=>acc+daysBetween(sorted[i].startDate,c.startDate),0)/(sorted.length-1))
+    : 28;
+  const last = sorted[sorted.length-1];
+  const nextPeriod = addDays(last.startDate, avgLen);
+  const ovulation = addDays(nextPeriod, -14);
+  const fertileStart = addDays(ovulation, -5);
+  const fertileEnd = addDays(ovulation, 1);
+  const pmsStart = addDays(nextPeriod, -7);
+  return { sorted, last, avgLen, nextPeriod, ovulation, fertileStart, fertileEnd, pmsStart };
+}
+
+// ── Nav ───────────────────────────────────────────────────────────
+function showView(id, btn) {
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+  document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+  document.getElementById("view-"+id).classList.add("active");
+  if(btn) btn.classList.add("active");
+  if(id==="home") renderHome();
+  if(id==="calendar") renderCalendar();
+  if(id==="history") renderHistory();
+}
+
+// ── Home ──────────────────────────────────────────────────────────
+function renderHome() {
+  const s = getStats();
+  const area = document.getElementById("home-content");
+  const rem = document.getElementById("reminder-area");
+  const tips = document.getElementById("tips-card");
+  rem.innerHTML="";
+  if(!s){ area.innerHTML='<div class="empty">No cycles logged yet.<br/>Tap <b>Log</b> to add your first period 🌸</div>'; tips.style.display="none"; return; }
+
+  const today = new Date(); today.setHours(0,0,0,0);
+  const dNext = daysBetween(today, s.nextPeriod);
+  const dOvul = daysBetween(today, s.ovulation);
+
+  // PMS reminder banner
+  if(dNext>=0 && dNext<=7){
+    rem.innerHTML=`<div class="reminder-banner">
+      <h3>🔔 Heads up — your period is coming in ${dNext} day${dNext===1?"":"s"}!</h3>
+      <ul>
+        <li>You may notice skin breakouts or oiliness in the next few days</li>
+        <li>Digestive changes like bloating or irregular bowel movements are common</li>
+        <li>You might feel more tired or emotionally sensitive — be gentle with yourself 💜</li>
+        <li>Stock up on period supplies if needed</li>
+      </ul>
+    </div>`;
+  }
+
+  area.innerHTML=`
+    <div class="insight-row"><div class="insight-icon">🩸</div><div><div class="insight-label">Last period started</div><div class="insight-val">${fmt(s.last.startDate)} · ${s.last.duration} days</div></div></div>
+    <div class="insight-row"><div class="insight-icon">📅</div><div><div class="insight-label">Next period expected</div><div class="insight-val">${fmt(s.nextPeriod)} ${dNext>=0?`(in ${dNext} days)`:`(${Math.abs(dNext)} days ago)`}</div></div></div>
+    <div class="insight-row"><div class="insight-icon">🥚</div><div><div class="insight-label">Estimated ovulation</div><div class="insight-val">${fmt(s.ovulation)} ${dOvul>=0?`(in ${dOvul} days)`:`(${Math.abs(dOvul)} days ago)`}</div></div></div>
+    <div class="insight-row"><div class="insight-icon">💜</div><div><div class="insight-label">Fertile window</div><div class="insight-val">${fmt(s.fertileStart)} – ${fmt(s.fertileEnd)}</div></div></div>
+    <div class="insight-row"><div class="insight-icon">🔄</div><div><div class="insight-label">Average cycle length</div><div class="insight-val">${s.avgLen} days ${s.sorted.length<2?"(default — log more cycles to personalise)":""}</div></div></div>
+  `;
+
+  document.getElementById("fertile-tip").innerHTML=`<b>Coming Up</b><br>Your next fertile window starts around <b>${fmt(s.fertileStart)}</b>. Consider preparing a few days in advance if you're trying to conceive.`;
+  tips.style.display="block";
+}
+
+// ── Log ───────────────────────────────────────────────────────────
+document.getElementById("input-start").max = new Date().toISOString().split("T")[0];
+
+function handleLog() {
+  const start = document.getElementById("input-start").value;
+  const dur = parseInt(document.getElementById("input-duration").value);
+  if(!start||!dur||dur<1) return;
+  cycles.push({startDate:start,duration:dur});
+  cycles.sort((a,b)=>new Date(a.startDate)-new Date(b.startDate));
+  save();
+  document.getElementById("input-start").value="";
+  document.getElementById("input-duration").value="";
+  const msg=document.getElementById("save-msg");
+  msg.style.display="block";
+  setTimeout(()=>msg.style.display="none",2500);
+}
+
+// ── History ───────────────────────────────────────────────────────
+function renderHistory() {
+  const el = document.getElementById("history-list");
+  if(!cycles.length){ el.innerHTML='<div class="empty">No cycles logged yet.</div>'; return; }
+  el.innerHTML=[...cycles].reverse().map((c,ri)=>{
+    const i=cycles.length-1-ri;
+    return `<div class="hist-item">
+      <div><div class="hist-name">${fmt(c.startDate)}</div><div class="hist-sub">Lasted ${c.duration} days</div></div>
+      <button class="del-btn" onclick="deleteCycle(${i})">🗑️</button>
+    </div>`;
+  }).join("");
+}
+function deleteCycle(i){ cycles.splice(i,1); save(); renderHistory(); }
+
+// ── Calendar ──────────────────────────────────────────────────────
+let calYear = new Date().getFullYear();
+let calMonth = new Date().getMonth();
+
+function changeMonth(d){ calMonth+=d; if(calMonth>11){calMonth=0;calYear++;}else if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); }
+
+function renderCalendar() {
+  const s = getStats();
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  // Build a set of marked dates
+  const marks = {}; // ISO -> type (period, predicted, fertile, ovulation, premenstrual)
+
+  // Past period days (actual)
+  cycles.forEach(c=>{
+    for(let i=0;i<c.duration;i++){
+      marks[toISO(addDays(c.startDate,i))]="period";
+    }
+  });
+
+  // Future predictions (up to 3 cycles ahead)
+  if(s){
+    for(let n=1;n<=3;n++){
+      const predStart=addDays(s.last.startDate, s.avgLen*n);
+      const predOvul=addDays(predStart,-14);
+      const predFertS=addDays(predOvul,-5);
+      const predFertE=addDays(predOvul,1);
+      const predPMS=addDays(predStart,-7);
+
+      // PMS week (7 days before)
+      for(let i=0;i<7;i++){
+        const d=toISO(addDays(predPMS,i));
+        if(!marks[d]) marks[d]="premenstrual";
+      }
+      // Fertile
+      for(let i=0;i<7;i++){
+        const d=toISO(addDays(predFertS,i));
+        if(!marks[d]) marks[d]="fertile";
+      }
+      // Ovulation (overwrites fertile)
+      marks[toISO(predOvul)]="ovulation";
+      // Predicted period
+      for(let i=0;i<(s.last.duration||5);i++){
+        const d=toISO(addDays(predStart,i));
+        if(!marks[d]||marks[d]==="premenstrual") marks[d]="predicted";
+      }
+    }
+  }
+
+  const months=["January","February","March","April","May","June","July","August","September","October","November","December"];
+  document.getElementById("cal-title").textContent=`${months[calMonth]} ${calYear}`;
+
+  const firstDay=new Date(calYear,calMonth,1).getDay();
+  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+  const startOffset=(firstDay+6)%7; // Mon start
+
+  const days=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  let html=days.map(d=>`<div class="cal-day-name">${d}</div>`).join("");
+
+  for(let i=0;i<startOffset;i++) html+=`<div class="cal-day empty-day"></div>`;
+  for(let d=1;d<=daysInMonth;d++){
+    const iso=`${calYear}-${String(calMonth+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+    const dt=new Date(calYear,calMonth,d);
+    const isToday=dt.getTime()===today.getTime();
+    const mark=marks[iso]||"";
+    let cls="cal-day";
+    if(mark) cls+=" "+mark;
+    if(isToday) cls+=" today";
+    html+=`<div class="${cls}" title="${mark.replace("-"," ")}">${d}</div>`;
+  }
+  document.getElementById("cal-grid").innerHTML=html;
+}
+
+// ── Init ──────────────────────────────────────────────────────────
+renderHome();
+</script>
+</body>
+</html>
