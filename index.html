@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Luna Cycle 🌸</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;600&display=swap" rel="stylesheet"/>
+<link rel="manifest" href="manifest.json"/>
+<meta name="theme-color" content="#b56da4"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+<meta name="apple-mobile-web-app-title" content="Luna Cycle"/>
+<link rel="apple-touch-icon" href="icon.png"/>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{min-height:100vh;background:linear-gradient(135deg,#fde8f0 0%,#ede0f7 100%);font-family:'Lato',sans-serif;color:#5a3e6b}
@@ -81,6 +87,11 @@
 
   /* PAGE */
   .view{display:none}.view.active{display:block}
+
+  /* EXPORT/IMPORT */
+  .sync-bar{display:flex;gap:10px;margin-bottom:20px}
+  .sync-btn{flex:1;padding:11px;border-radius:16px;border:1.5px solid #e8c6f0;background:rgba(255,255,255,0.75);color:#b56da4;font-family:'Playfair Display',serif;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s}
+  .sync-btn:hover{background:linear-gradient(90deg,#e38bbf,#b56da4);color:#fff;border-color:transparent}
 </style>
 </head>
 <body>
@@ -96,6 +107,12 @@
 </header>
 
 <div class="container">
+
+  <!-- SYNC BAR (always visible) -->
+  <div class="sync-bar">
+    <button class="sync-btn" onclick="exportData()">⬇️ Export Data</button>
+    <label class="sync-btn" style="text-align:center;cursor:pointer">⬆️ Import Data<input type="file" accept=".json" style="display:none" onchange="importData(event)"/></label>
+  </div>
 
   <!-- HOME -->
   <div id="view-home" class="view active">
@@ -336,6 +353,29 @@ function renderCalendar() {
   }
   document.getElementById("cal-grid").innerHTML=html;
 }
+
+// ── Export / Import ───────────────────────────────────────────────
+function exportData(){
+  const blob=new Blob([JSON.stringify(cycles,null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download="luna_cycle_backup.json"; a.click();
+}
+function importData(e){
+  const file=e.target.files[0]; if(!file) return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    try{
+      const data=JSON.parse(ev.target.result);
+      if(!Array.isArray(data)) throw new Error();
+      cycles=data; save(); renderHome(); renderHistory();
+      alert("✓ Data imported successfully! 🌸");
+    }catch{ alert("Oops — that file doesn't look right. Please use a Luna Cycle export file."); }
+  };
+  r.readAsText(file);
+}
+
+// ── Service Worker registration ───────────────────────────────────
+if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
 
 // ── Init ──────────────────────────────────────────────────────────
 renderHome();
