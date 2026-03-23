@@ -1,3 +1,6 @@
+// OneSignal service worker
+importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
+
 const CACHE = "luna-cycle-v1";
 const ASSETS = [
   "/luna-cycle/",
