@@ -11,6 +11,66 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
 <meta name="apple-mobile-web-app-title" content="Luna Cycle"/>
 <link rel="apple-touch-icon" href="icon.png"/>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "a3ee9828-b67a-4c36-a4f4-15cf953ff536",
+      safari_web_id: "web.onesignal.auto.2b467c5d-2ccd-4e09-a57b-cb7ab9efd0c0",
+      notifyButton: { enable: true },
+      welcomeNotification: {
+        title: "🌸 Luna Cycle",
+        message: "You're all set! We'll remind you before your next period 💜"
+      },
+      promptOptions: {
+        slidedown: {
+          prompts: [{
+            type: "push",
+            autoPrompt: true,
+            text: {
+              actionMessage: "Luna Cycle would like to remind you before your period and fertile window 🌸",
+              acceptButton: "Allow",
+              cancelButton: "Not now"
+            },
+            delay: { pageViews: 1, timeDelay: 3 }
+          }]
+        }
+      }
+    });
+    // Schedule notifications based on cycle data
+    scheduleLunaNotifications(OneSignal);
+  });
+
+  async function scheduleLunaNotifications(OneSignal) {
+    try {
+      const data = JSON.parse(localStorage.getItem("luna_cycles") || "[]");
+      if (!data.length) return;
+      const sorted = data.sort((a,b) => new Date(a.startDate)-new Date(b.startDate));
+      const last = sorted[sorted.length-1];
+      const avgLen = sorted.length >= 2
+        ? Math.round(sorted.slice(1).reduce((acc,c,i) => acc+Math.round((new Date(c.startDate)-new Date(sorted[i].startDate))/86400000), 0) / (sorted.length-1))
+        : 28;
+      const nextPeriod = new Date(last.startDate);
+      nextPeriod.setDate(nextPeriod.getDate() + avgLen);
+      const pmsDate = new Date(nextPeriod); pmsDate.setDate(pmsDate.getDate()-7);
+      const ovulation = new Date(nextPeriod); ovulation.setDate(ovulation.getDate()-14);
+      const fertileStart = new Date(ovulation); fertileStart.setDate(fertileStart.getDate()-5);
+      const today = new Date(); today.setHours(0,0,0,0);
+      const dNext = Math.round((nextPeriod-today)/86400000);
+      const dPMS  = Math.round((pmsDate-today)/86400000);
+      const dFert = Math.round((fertileStart-today)/86400000);
+
+      // Store upcoming dates as tags so OneSignal dashboard can target segments
+      await OneSignal.User.addTags({
+        days_until_period: String(dNext),
+        days_until_pms: String(dPMS),
+        days_until_fertile: String(dFert),
+        next_period_date: nextPeriod.toISOString().split("T")[0]
+      });
+    } catch(e) { console.log("Luna notify:", e); }
+  }
+</script>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{min-height:100vh;background:linear-gradient(135deg,#fde8f0 0%,#ede0f7 100%);font-family:'Lato',sans-serif;color:#5a3e6b}
